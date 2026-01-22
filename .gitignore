@@ -1,1 +1,6 @@
-**/*.py
+day-01/rotations.py
+day-01/shortInput.txt
+day-01/zeroes.js
+
+day-02/findInvalid.py
+day-02/Invalidpart2.py
