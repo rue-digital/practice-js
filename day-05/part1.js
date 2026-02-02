@@ -55,3 +55,7 @@ export async function part1(filepath) {
   const freshcount = countIdsInRange(ids, ranges);
   return freshcount;
 }
+
+const filepath = process.argv[2];
+const freshIdCount = await part1(filepath);
+console.log(freshIdCount);
