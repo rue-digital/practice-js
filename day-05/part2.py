@@ -1,31 +1,37 @@
-filepath = "input.txt"
-ranges = []
+def parse(filepath):
+    ranges = []
+    with open(filepath, "r") as file:
+        for line in file:
 
-with open(filepath, "r") as file:
-    for line in file:
+            if "-" in line:
+                start = int(line.split("-")[0])
+                end = int(line.split("-")[1])
+                ranges.append([start, end])
 
-        if "-" in line:
-            start = int(line.split("-")[0])
-            end = int(line.split("-")[1])
-            ranges.append([start, end])
+    ranges.sort(key=lambda a: a[0])
+    return ranges
 
-ranges.sort(key=lambda a: a[0])
+def mergeRanges(ranges):
+    merged_ranges = []
 
-merged_ranges = []
-
-i = 0
-while i < len(ranges):
-    start = ranges[i][0]
-    end = ranges[i][1]
-    while i+1 < len(ranges) and end >= ranges[i+1][0]:
-        end = max(end, ranges[i+1][1])
+    i = 0
+    while i < len(ranges):
+        start = ranges[i][0]
+        end = ranges[i][1]
+        while i+1 < len(ranges) and end >= ranges[i+1][0]:
+            end = max(end, ranges[i+1][1])
+            i+=1
+        merged_ranges.append([start, end])
         i+=1
-    merged_ranges.append([start, end])
-    i+=1
+    
+    return merged_ranges
 
-numberOfIds = 0
-for r in merged_ranges:
-    numberOfIds += (r[1] - r[0] + 1)
+def part2(filepath):
+    ranges = parse(filepath)
+    merged_ranges = mergeRanges(ranges)
 
-assert numberOfIds == 344423158480189, f"expected 344423158480189, got {numberOfIds}"
-print(f"Number of Ids: {numberOfIds}")
+    numberOfIds = 0
+    for r in merged_ranges:
+        numberOfIds += (r[1] - r[0] + 1)
+    
+    return numberOfIds

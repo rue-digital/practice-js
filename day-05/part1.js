@@ -1,5 +1,4 @@
 import { readFile } from "node:fs/promises";
-import assert from "node:assert";
 
 function parseInput(text) {
   const lines = text.split("\n");
@@ -50,13 +49,9 @@ function countIdsInRange(ids, ranges) {
   return freshcount;
 }
 
-const filePath = "input.txt";
-const content = await readFile(filePath, "utf-8");
-const { ids, ranges } = parseInput(content);
-const freshcount = countIdsInRange(ids, ranges);
-
-const actual = freshcount;
-const expected = 505;
-
-assert.strictEqual(actual, expected, `Expected ${expected} but got ${actual}`);
-console.log(freshcount);
+export async function part1(filepath) {
+  const content = await readFile(filepath, "utf-8");
+  const { ids, ranges } = parseInput(content);
+  const freshcount = countIdsInRange(ids, ranges);
+  return freshcount;
+}
