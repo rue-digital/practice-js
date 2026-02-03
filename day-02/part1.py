@@ -1,30 +1,24 @@
-filepath = 'input.txt'
+filepath = "input.txt"
 
-with open(filepath, 'r') as file:
+with open(filepath, "r") as file:
 
-    input = f.read()
-    ranges = input.split(',')
+    input = file.read()
+    ranges = input.split(",")
 
-    total = 0
+    symmetricalCount = 0
 
     for r in ranges:
-        start, end = r.split('-')
+        start, end = r.split("-")
 
-        for val in range(int(start), int(end)+1):
+        for val in range(int(start), int(end) + 1):
 
-            string = str(val)
-            if len(string) % 2 == 0:
-                midpoint = len(str_val)//2
-                firstHalf = str_val[:midpoint]
-                secondHalf = str_val[midpoint:]
+            intInRange = str(val)
+            if len(intInRange) % 2 == 0:
+                midpoint = len(intInRange) // 2
+                firstHalf = intInRange[:midpoint]
+                secondHalf = intInRange[midpoint:]
 
                 if firstHalf == secondHalf:
-                    total += val
+                    symmetricalCount += val
 
-    print(total)
-
-
-
-
-
-
+    print(symmetricalCount)
