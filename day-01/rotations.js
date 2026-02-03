@@ -1,7 +1,7 @@
-const fs = require('fs');
+import { readFile } from 'node:fs/promises';
 const filePath = 'input.txt';
-const content = fs.readFileSync(filePath, 'utf-8');
-const lines = content.split(/\r?\n/);
+const content = await readFile(filePath, 'utf-8');
+const lines = content.split('\n');
 
 
 let position = 50;
@@ -18,10 +18,9 @@ for (const line of lines){
         position = (position + turns) % 100;
     }
 
-    console.log(position);
     if (position === 0){
         hitsZero++;
     }
 }
 
-console.log(hitsZero);
+console.log("final : " + hitsZero);
