@@ -13,12 +13,14 @@ with open(filepath, "r") as file:
         for val in range(int(start), int(end) + 1):
 
             intInRange = str(val)
-            if len(intInRange) % 2 == 0:
-                midpoint = len(intInRange) // 2
-                firstHalf = intInRange[:midpoint]
-                secondHalf = intInRange[midpoint:]
+            if len(intInRange) % 2 == 1:
+                continue
+            
+            midpoint = len(intInRange) // 2
+            firstHalf = intInRange[:midpoint]
+            secondHalf = intInRange[midpoint:]
 
-                if firstHalf == secondHalf:
-                    symmetricalCount += val
+            if firstHalf == secondHalf:
+                symmetricalCount += val
 
     print(symmetricalCount)
