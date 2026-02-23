@@ -14,7 +14,7 @@ async function parse(filepath) {
   return points;
 }
 
-function calcDistance(a, b) {
+function getDistance(a, b) {
   return (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2;
 }
 
@@ -25,59 +25,54 @@ function makePairs(points) {
     for (let j = i + 1; j < points.length; j++) {
       const p1 = points[i];
       const p2 = points[j];
-      pairs.push([p1, p2, calcDistance(p1, p2)]);
+      pairs.push([p1, p2, getDistance(p1, p2)]);
     }
   }
 
-  pairs.sort((a, b) => a[2] - b[2]);
-  return pairs;
+  return pairs.sort((a, b) => a[2] - b[2]);
 }
 
 function makeConnections(points, pairs, connections) {
   let count = 0;
   let circuit = points.map((a) => {
-    return new Set([JSON.stringify(a)]);
+    return new Set([`${a}`]);
   });
 
-  let connect;
+  let connectPairs;
 
   while (connections === -1 ? circuit.length !== 1 : count < connections) {
-    connect = pairs[count];
-    const p1 = JSON.stringify(connect[0]);
-    const p2 = JSON.stringify(connect[1]);
+    connectPairs = pairs[count];
+    const p1 = `${connectPairs[0]}`;
+    const p2 = `${connectPairs[1]}`;
 
     let combineCircuits = [];
     let alreadyConnected = false;
-    for (let i = 0; i < circuit.length; i++) {
-      if (circuit[i].has(p1) && circuit[i].has(p2)) {
-        alreadyConnected = true;
-      } else if (circuit[i].has(p1) || circuit[i].has(p2)) {
-        combineCircuits.push(i);
-      }
+    for (const [index, edge] of circuit.entries()) {
+      if (edge.has(p1) && edge.has(p2)) alreadyConnected = true;
+      else if (edge.has(p1) || edge.has(p2)) combineCircuits.push(index);
     }
 
     count++;
     if (alreadyConnected) continue;
 
     const union = new Set(combineCircuits.flatMap((i) => [...circuit[i]]));
-    union.add(p1);
-    union.add(p2);
-    circuit.push(union);
+    circuit.push(union.add(p1, p2));
     circuit = circuit.filter((_, i) => {
       return !combineCircuits.includes(i);
     });
   }
+
   circuit.sort((a, b) => b.size - a.size);
-  return [circuit, connect];
+  return [circuit, connectPairs];
 }
 
 async function solve(filepath, connections) {
   const points = await parse(filepath);
   const pairs = makePairs(points);
   const [circuit, lastConnection] = makeConnections(points, pairs, connections);
-  return connections !== -1
-    ? circuit[0].size * circuit[1].size * circuit[2].size
-    : lastConnection[0][0] * lastConnection[1][0];
+  return connections === -1
+    ? lastConnection[0][0] * lastConnection[1][0]
+    : circuit[0].size * circuit[1].size * circuit[2].size;
 }
 
 export { solve };
